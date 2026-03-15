@@ -1,10 +1,17 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { MAX_IMAGE_SIZE, ALLOWED_IMAGE_TYPES } from "@/lib/constants";
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-);
+let _supabaseAdmin: SupabaseClient | null = null;
+
+function getSupabaseAdmin() {
+  if (!_supabaseAdmin) {
+    _supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    );
+  }
+  return _supabaseAdmin;
+}
 
 export async function getSignedUploadUrl(
   filename: string,
@@ -24,6 +31,8 @@ export async function getSignedUploadUrl(
   const ext = filename.split(".").pop() || "jpg";
   const path = `${userId}/${imageId}.${ext}`;
 
+  const supabaseAdmin = getSupabaseAdmin();
+
   const { data, error } = await supabaseAdmin.storage
     .from("images")
     .createSignedUploadUrl(path);
@@ -32,7 +41,7 @@ export async function getSignedUploadUrl(
     throw new Error(`Failed to create upload URL: ${error.message}`);
   }
 
-  const publicUrl = supabaseAdmin.storage.from("images").getPublicUrl(path).data.publicUrl;
+  const publicUrl = getSupabaseAdmin().storage.from("images").getPublicUrl(path).data.publicUrl;
 
   return {
     uploadUrl: data.signedUrl,
