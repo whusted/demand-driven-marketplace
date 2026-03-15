@@ -12,13 +12,6 @@ import type {
   Condition,
   OfferCondition,
   NotificationType,
-  User,
-  Listing,
-  Offer,
-  Message,
-  SellerAlert,
-  Review,
-  Notification,
 } from "@/types";
 
 describe("types", () => {

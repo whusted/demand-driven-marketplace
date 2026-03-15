@@ -1,6 +1,6 @@
 import { eq, and, desc, asc, sql, ilike, lte, gte } from "drizzle-orm";
 import { db } from "@/db";
-import { listings, listingTags, tags, categories } from "@/db/schema";
+import { listings, tags, categories } from "@/db/schema";
 import { PAGINATION_DEFAULT_LIMIT } from "@/lib/constants";
 
 export interface SearchParams {

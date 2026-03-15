@@ -1,7 +1,7 @@
 import { eq, and, desc, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { offers, offerImages, listings, users } from "@/db/schema";
-import type { CreateOfferInput, UpdateOfferInput } from "@/lib/validators/offers";
+import type { CreateOfferInput } from "@/lib/validators/offers";
 
 export async function createOffer(
   data: CreateOfferInput,

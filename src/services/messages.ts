@@ -1,4 +1,4 @@
-import { eq, and, asc, lt, ne, isNull, sql } from "drizzle-orm";
+import { eq, and, asc, lt, ne, isNull } from "drizzle-orm";
 import { db } from "@/db";
 import { messages, offers, listings } from "@/db/schema";
 
