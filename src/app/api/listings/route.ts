@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth, getAuthUser, AuthError } from "@/lib/supabase/auth";
+import { requireAuth, AuthError } from "@/lib/supabase/auth";
 import { createListingSchema } from "@/lib/validators/listings";
 import { createListing } from "@/services/listings";
-import { db } from "@/db";
-import { listings } from "@/db/schema";
-import { eq, sql, desc, asc } from "drizzle-orm";
+import { searchListings } from "@/services/search";
 import { PAGINATION_DEFAULT_LIMIT, PAGINATION_MAX_LIMIT } from "@/lib/constants";
 
 export async function POST(request: NextRequest) {
@@ -45,36 +43,25 @@ export async function GET(request: NextRequest) {
       PAGINATION_MAX_LIMIT,
       Math.max(1, parseInt(searchParams.get("limit") || String(PAGINATION_DEFAULT_LIMIT))),
     );
-    const sort = searchParams.get("sort") || "newest";
-    const status = searchParams.get("status") || "active";
-    const offset = (page - 1) * limit;
 
-    // Basic listing query — search/filter enhanced in US3
-    const conditions = [eq(listings.status, status as "active" | "fulfilled" | "expired" | "closed")];
+    const tagsParam = searchParams.get("tags");
 
-    const orderBy = sort === "price_asc"
-      ? asc(listings.maxPrice)
-      : sort === "price_desc"
-        ? desc(listings.maxPrice)
-        : desc(listings.createdAt);
-
-    const results = await db
-      .select()
-      .from(listings)
-      .where(conditions.length === 1 ? conditions[0] : undefined)
-      .orderBy(orderBy)
-      .limit(limit)
-      .offset(offset);
-
-    const [{ count }] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(listings)
-      .where(conditions.length === 1 ? conditions[0] : undefined);
-
-    return NextResponse.json({
-      data: results,
-      meta: { page, limit, total: Number(count) },
+    const result = await searchListings({
+      q: searchParams.get("q") || undefined,
+      category: searchParams.get("category") || undefined,
+      tags: tagsParam ? tagsParam.split(",") : undefined,
+      condition: searchParams.get("condition") || undefined,
+      minPrice: searchParams.get("min_price") ? parseInt(searchParams.get("min_price")!) : undefined,
+      maxPrice: searchParams.get("max_price") ? parseInt(searchParams.get("max_price")!) : undefined,
+      location: searchParams.get("location") || undefined,
+      localOnly: searchParams.get("local_only") === "true",
+      status: searchParams.get("status") || "active",
+      sort: searchParams.get("sort") || undefined,
+      page,
+      limit,
     });
+
+    return NextResponse.json(result);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
