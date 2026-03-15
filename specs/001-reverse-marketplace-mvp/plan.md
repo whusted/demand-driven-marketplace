@@ -12,13 +12,13 @@ Build a demand-driven marketplace where buyers post wanted listings for rare/col
 **Language/Version**: TypeScript 5.x (strict mode)
 **Primary Dependencies**: Next.js 15 (App Router, React Server Components), Tailwind CSS 4, shadcn/ui, Drizzle ORM, TanStack Query
 **Storage**: PostgreSQL 15+ (via Supabase), Supabase Storage (images), Supabase Realtime (messaging/notifications)
-**Auth**: Supabase Auth (email/password + Google OAuth)
-**Email**: Resend (transactional notifications)
+**Auth**: Supabase Auth (email/password only for MVP; Google OAuth deferred)
+**Email**: Deferred — in-app notifications only for MVP (Resend integration deferred)
 **Testing**: Vitest (unit), Playwright (e2e)
 **Target Platform**: Web (responsive, mobile-friendly) — deployed on Vercel
 **Project Type**: Full-stack web application (monorepo)
 **Performance Goals**: <1s search results (95th percentile), <5s page loads, 1,000 concurrent users
-**Constraints**: No payment processing in MVP, free-text location (no geocoding), minimal abuse prevention (user reporting only)
+**Constraints**: No payment processing in MVP, free-text location (no geocoding), minimal abuse prevention (user reporting only), local Supabase only (no cloud project yet), email/password auth only, no email notifications
 **Scale/Scope**: Initial target ~1,000 users, ~10,000 listings, ~50,000 offers
 
 ## Constitution Check
