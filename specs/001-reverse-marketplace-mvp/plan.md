@@ -18,7 +18,7 @@ Build a demand-driven marketplace where buyers post wanted listings for rare/col
 **Target Platform**: Web (responsive, mobile-friendly) — deployed on Vercel
 **Project Type**: Full-stack web application (monorepo)
 **Performance Goals**: <1s search results (95th percentile), <5s page loads, 1,000 concurrent users
-**Constraints**: No payment processing in MVP, free-text location (no geocoding), minimal abuse prevention (user reporting only), local Supabase only (no cloud project yet), email/password auth only, no email notifications
+**Constraints**: No payment processing in MVP, free-text location (no geocoding), minimal abuse prevention (user reporting only), local Supabase only (no cloud project yet), email/password auth only, no email notifications, no in-app notifications (entire notification system deferred to post-MVP)
 **Scale/Scope**: Initial target ~1,000 users, ~10,000 listings, ~50,000 offers
 
 ## Constitution Check

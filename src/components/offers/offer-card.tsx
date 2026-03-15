@@ -20,6 +20,7 @@ interface OfferCardProps {
   onAccept?: () => void;
   onDecline?: () => void;
   onWithdraw?: () => void;
+  onMessage?: () => void;
   onClick?: () => void;
 }
 
@@ -36,6 +37,7 @@ export function OfferCard({
   onAccept,
   onDecline,
   onWithdraw,
+  onMessage,
   onClick,
 }: OfferCardProps) {
   const exceedsBudget = listingMaxPrice != null && price > listingMaxPrice;
@@ -96,19 +98,20 @@ export function OfferCard({
       </CardContent>
 
       {/* Actions */}
-      {status === "pending" && (
-        <CardFooter className="gap-2" onClick={(e) => e.stopPropagation()}>
-          {role === "buyer" && onAccept && (
-            <Button size="sm" onClick={onAccept}>Accept</Button>
-          )}
-          {role === "buyer" && onDecline && (
-            <Button size="sm" variant="outline" onClick={onDecline}>Decline</Button>
-          )}
-          {role === "seller" && onWithdraw && (
-            <Button size="sm" variant="outline" onClick={onWithdraw}>Withdraw</Button>
-          )}
-        </CardFooter>
-      )}
+      <CardFooter className="gap-2" onClick={(e) => e.stopPropagation()}>
+        {status === "pending" && role === "buyer" && onAccept && (
+          <Button size="sm" onClick={onAccept}>Accept</Button>
+        )}
+        {status === "pending" && role === "buyer" && onDecline && (
+          <Button size="sm" variant="outline" onClick={onDecline}>Decline</Button>
+        )}
+        {status === "pending" && role === "seller" && onWithdraw && (
+          <Button size="sm" variant="outline" onClick={onWithdraw}>Withdraw</Button>
+        )}
+        {onMessage && (
+          <Button size="sm" variant="outline" onClick={onMessage}>Message</Button>
+        )}
+      </CardFooter>
     </Card>
   );
 }
