@@ -10,9 +10,10 @@ import {
 } from "@/db/schema";
 import { slugify } from "@/lib/utils";
 import type { CreateListingInput, UpdateListingInput } from "@/lib/validators/listings";
+import { matchAlertForListing } from "@/services/alerts";
 
 export async function createListing(data: CreateListingInput, userId: string) {
-  return await db.transaction(async (tx) => {
+  const listing = await db.transaction(async (tx) => {
     // Insert the listing
     const [listing] = await tx
       .insert(listings)
@@ -70,6 +71,13 @@ export async function createListing(data: CreateListingInput, userId: string) {
 
     return listing;
   });
+
+  // Fire-and-forget alert matching (don't block listing creation)
+  matchAlertForListing(listing!.id).catch(() => {
+    // Silently ignore matching errors — alerts are best-effort
+  });
+
+  return listing;
 }
 
 export async function getListingById(id: string) {
