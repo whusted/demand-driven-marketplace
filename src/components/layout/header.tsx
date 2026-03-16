@@ -62,9 +62,6 @@ export function Header() {
           <Link href="/messages" className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}>
             Messages
           </Link>
-          <Link href="/notifications" className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}>
-            Notifications
-          </Link>
 
           <DropdownMenu>
             <DropdownMenuTrigger className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "rounded-full")}>
